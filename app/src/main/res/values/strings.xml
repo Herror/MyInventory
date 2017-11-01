@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MyInventory</string>
+    <string name="title_activity_test">Test</string>
+
+    <!-- Label for editor overflow menu option that deletes the current product [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
+
+    <!-- Label for catalog overflow menu option that deletes all products [CHAR LIMIT=20] -->
+    <string name="action_delete_all">Delete all</string>
+
+    <!-- Label for editor overflow menu option that deletes the current product [CHAR LIMIT=20] -->
+    <string name="action_save">Save</string>
+
+    <!-- Label for editor activity that displays the hint for the product name [CHAR LIMIT=20] -->
+    <string name="hint_product_name">Name</string>
+
+    <!-- Label for editor activity that displays the quantity TextView [CHAR LIMIT=20] -->
+    <string name="quantity">Quantity</string>
+
+    <!-- Label for editor activity that displays the product TextView [CHAR LIMIT=20] -->
+    <string name="product">Product</string>
+
+    <!-- Label for editor activity that displays the OrderProduct TextView [CHAR LIMIT=20] -->
+    <string name="order_product">Order product</string>
+
+    <!-- Label for editor activity that displays the text on the order button [CHAR LIMIT=20] -->
+    <string name="order">Order</string>
+
+    <!-- Label for catalog activity that displays the product's name [CHAR LIMIT=20] -->
+    <string name="product_name">Product name</string>
+
+    <!-- Label for catalog overflow menu that inserts dummy data [CHAR LIMIT=20] -->
+    <string name="insert_dummy_data">Insert Dummy Data</string>
+</resources>
