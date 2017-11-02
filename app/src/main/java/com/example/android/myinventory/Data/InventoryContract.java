@@ -27,12 +27,16 @@ public final class InventoryContract {
     //Inner class that defines the table contents
 
     public static abstract class InventoryEntry implements BaseColumns{
+
+        //Create the content URI to access the inventory data in the provider
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
+
         public static final String TABLE_NAME = "products";
 
         public static final String _ID = BaseColumns._ID;
-        public static final String PRODUCT_NAME = "name";
-        public static final String PRODUCT_QUANTITY = "quantity";
-        public static final String PRODUCT_PRICE = "price";
+        public static final String COLUMN_PRODUCT_NAME = "name";
+        public static final String COLUMN_PRODUCT_QUANTITY = "quantity";
+        public static final String COLUMN_PRODUCT_PRICE = "price";
     }
 
     //The MIME type of the CONTENT_URI for a list of products of the inventory

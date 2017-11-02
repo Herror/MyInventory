@@ -22,6 +22,10 @@
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.android.myinventory.CatalogActivity" />
+        <provider
+            android:authorities="com.example.android.myinventory"
+            android:name=".Data.InventoryProvider"
+            android:exported="false" />
 
     </application>
 
