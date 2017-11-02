@@ -1,5 +1,6 @@
 package com.example.android.myinventory.Data;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -17,7 +18,7 @@ public final class InventoryContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     //create a constant for the path of the pets table
-    public static final String PATH_INVENTORU = "myinventory";
+    public static final String PATH_INVENTORY = "myinventory";
 
     //To prevent someone from accidentally instantiating the contract class,
     //make the constructor private
@@ -25,13 +26,19 @@ public final class InventoryContract {
 
     //Inner class that defines the table contents
 
-    public static abstract class InvetoryEntry implements BaseColumns{
+    public static abstract class InventoryEntry implements BaseColumns{
         public static final String TABLE_NAME = "products";
 
         public static final String _ID = BaseColumns._ID;
         public static final String PRODUCT_NAME = "name";
         public static final String PRODUCT_QUANTITY = "quantity";
         public static final String PRODUCT_PRICE = "price";
-
     }
+
+    //The MIME type of the CONTENT_URI for a list of products of the inventory
+    public static final String CONTENT_LIST_TYPE =
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
+    //The MIME type of the CONTENT_URI for a single product pf the inventory
+    public static final String CONTENT_ITEM_TYPE =
+            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
 }

@@ -3,7 +3,7 @@ package com.example.android.myinventory.Data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.android.myinventory.Data.InventoryContract.InvetoryEntry;
+import com.example.android.myinventory.Data.InventoryContract.InventoryEntry;
 
 /**
  * Created by enach on 11/1/2017.
@@ -26,11 +26,11 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //create a String that contains the SQL statement to create the table
         String SQL_CREATE_ENTRIES =
-                "CREATE TABLE " + InvetoryEntry.TABLE_NAME + " (" +
-                        InvetoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        InvetoryEntry.PRODUCT_NAME + " TEXT NOT NULL," +
-                        InvetoryEntry.PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
-                        InvetoryEntry.PRODUCT_PRICE + " INTEGER NOT NULL)";
+                "CREATE TABLE " + InventoryEntry.TABLE_NAME + " (" +
+                        InventoryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        InventoryEntry.PRODUCT_NAME + " TEXT NOT NULL," +
+                        InventoryEntry.PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
+                        InventoryEntry.PRODUCT_PRICE + " INTEGER NOT NULL)";
 
         sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
 
