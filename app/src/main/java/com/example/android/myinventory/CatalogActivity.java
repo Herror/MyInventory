@@ -39,6 +39,12 @@ public class CatalogActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
+    }
+
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the pets database.
@@ -94,7 +100,6 @@ public class CatalogActivity extends AppCompatActivity {
             //Respond to a click on the "Insert dummy data" menu option
             case R.id.dummy_data:
                 insertProduct();
-                displayDatabaseInfo();
                 return true;
             //Respond to a click on the "Delete all" menu option
             case R.id.delete_all:

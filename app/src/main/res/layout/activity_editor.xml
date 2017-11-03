@@ -22,10 +22,35 @@
             android:textStyle="bold"/>
 
         <EditText
+            android:id="@+id/product_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:hint="@string/hint_product_name"
+            android:textSize="16dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Price"
+            android:textSize="16dp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="$"
             android:textSize="16dp"/>
 
     </LinearLayout>
@@ -60,6 +85,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/product_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
