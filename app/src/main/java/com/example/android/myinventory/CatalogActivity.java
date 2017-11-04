@@ -56,15 +56,53 @@ public class CatalogActivity extends AppCompatActivity {
 
         // Create and/or open a database to read from it
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        //Define projection for the cursor
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
+                InventoryEntry.COLUMN_PRODUCT_PRICE
+        };
+        //Query the information from the table
+        Cursor cursor = db.query(
+                InventoryEntry.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
 
-        // Perform this raw SQL query "SELECT * FROM pets"
-        // to get a Cursor that contains all rows from the pets table.
-        Cursor cursor = db.rawQuery("SELECT * FROM " + InventoryEntry.TABLE_NAME, null);
+        TextView displayView = (TextView) findViewById(R.id.test);
+
         try {
             // Display the number of rows in the Cursor (which reflects the number of rows in the
             // pets table in the database).
-            TextView displayView = (TextView) findViewById(R.id.test);
-            displayView.setText("Number of rows in inventory database table: " + cursor.getCount());
+            displayView.setText("The inventory table contains " + cursor.getCount() + " products.\n\n");
+            displayView.append(InventoryEntry._ID + " - " +
+                    InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
+                    InventoryEntry.COLUMN_PRODUCT_QUANTITY + " - " + 
+                    InventoryEntry.COLUMN_PRODUCT_PRICE + "\n");
+
+            //figure out the index for each column
+            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
+            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+            int quantityIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+            int priceIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+
+            //iterate though all the returned rows in the cursor
+            while (cursor.moveToNext()){
+                //use that index to extract the String or int value of the word
+                //at the current row the cursor is on
+                int currentID = cursor.getInt(idColumnIndex);
+                String currentName = cursor.getString(nameColumnIndex);
+                int currentQuantity = cursor.getInt(quantityIndex);
+                int currentPrice = cursor.getInt(priceIndex);
+                //display the values from each column of the current row
+                displayView.append("\n" + currentID + " - " + currentName + " - " + currentQuantity
+                 + " - " + currentPrice + "$");
+            }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
