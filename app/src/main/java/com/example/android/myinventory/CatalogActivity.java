@@ -82,7 +82,7 @@ public class CatalogActivity extends AppCompatActivity {
             displayView.setText("The inventory table contains " + cursor.getCount() + " products.\n\n");
             displayView.append(InventoryEntry._ID + " - " +
                     InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
-                    InventoryEntry.COLUMN_PRODUCT_QUANTITY + " - " + 
+                    InventoryEntry.COLUMN_PRODUCT_QUANTITY + " - " +
                     InventoryEntry.COLUMN_PRODUCT_PRICE + "\n");
 
             //figure out the index for each column

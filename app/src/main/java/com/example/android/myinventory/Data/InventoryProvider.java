@@ -1,9 +1,11 @@
 package com.example.android.myinventory.Data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,24 +41,67 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        //Initialize the InventoryDbHelper
+        mDbHelper = new InventoryDbHelper(getContext());
+        return true;
     }
 
-    @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        // get readable database
+        SQLiteDatabase database = mDbHelper.getReadableDatabase();
+
+        //This cursor will hold the results of the query
+        //For now I will set it to null
+        Cursor cursor = null;
+
+        //Figure out if the URI matcher can match the specific code of the URI
+        //and create a switch statement to help with that
+        int match = sUriMatcher.match(uri);
+        switch (match){
+            case PRODUCTS:
+                cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case PRODUCT_ID:
+                //I extract out the ID for the URI
+                //I replace selection with "=?" and the selection args with the desired number
+
+                selection = InventoryContract.InventoryEntry._ID + "=?";
+                //String.valueOf(ContentUris.parseId(uri)) - will get the actual number at
+                //the end of the URI
+                selectionArgs = new String[]{
+                        String.valueOf(ContentUris.parseId(uri))
+                };
+                // This will perform a query on the Inventory table where the _id equals 3 to return a
+                // Cursor containing that row of the table.
+                cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+                default:
+                    throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+        //Set notification URI on the Cursor,
+        //so we know what content URI the Cursor was created for.
+        //If the data at this URI changes, then we know we need to update the cursor.
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        
+        return cursor;
     }
 
-    @Nullable
-    @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
-    }
 
-    @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+    public Uri insert(Uri uri, ContentValues contentValues) {
         return null;
     }
 
@@ -68,5 +113,10 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
     }
 }
