@@ -54,8 +54,6 @@ public class CatalogActivity extends AppCompatActivity {
         // and pass the context, which is the current activity.
         mDbHelper = new InventoryDbHelper(this);
 
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
         //Define projection for the cursor
         String[] projection = {
                 InventoryEntry._ID,
@@ -63,16 +61,15 @@ public class CatalogActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_PRODUCT_QUANTITY,
                 InventoryEntry.COLUMN_PRODUCT_PRICE
         };
-        //Query the information from the table
-        Cursor cursor = db.query(
-                InventoryEntry.TABLE_NAME,
+
+        //Perform a query on the provider using the ContentResolver.
+        //use the InventoryEntry.CONTENT_URI to access the inventory data
+        Cursor cursor = getContentResolver().query(
+                InventoryEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
-                null,
-                null,
-                null
-        );
+                null);
 
         TextView displayView = (TextView) findViewById(R.id.test);
 
@@ -111,16 +108,16 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     private void insertProduct(){
-        //Gets the data repository in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //Create a new map of values where the column names are the keys
         ContentValues values = new ContentValues();
+
         //Add the desired values for the dummy data
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Bolts");
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, "100");
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, "200");
-        //Insert the data into the table
-        db.insert(InventoryEntry.TABLE_NAME, null, values);
+
+        //Insert the data into the table using the ContentProvider
+        Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
 
     @Override

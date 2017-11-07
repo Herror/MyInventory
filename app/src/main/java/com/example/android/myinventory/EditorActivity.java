@@ -2,6 +2,7 @@ package com.example.android.myinventory;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,18 +44,20 @@ public class EditorActivity extends AppCompatActivity {
         int quantity = Integer.parseInt(productQuantity);
         int price = Integer.parseInt(productPrice);
 
-        InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        //Create a ContentValues object where column names are the keys,
+        //and inventory attributes from thge editor are the values
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, productName);
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, price);
 
-        long newRow = db.insert(InventoryEntry.TABLE_NAME, null, values);
+        Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
-        if(newRow == -1){
+        if(newUri == null){
+            // If the new content URI is null, then there was an error with insertion.
             Toast.makeText(this, "You've screwed up", Toast.LENGTH_SHORT).show();
         }else {
+            // Otherwise, the insertion was successful and we can display a toast.
             Toast.makeText(this, "New product added", Toast.LENGTH_SHORT).show();
         }
     }

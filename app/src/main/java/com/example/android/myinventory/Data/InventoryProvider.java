@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.example.android.myinventory.Data.InventoryContract.InventoryEntry;
+import static android.R.attr.id;
 
 /**
  * Created by enach on 11/3/2017.
@@ -95,14 +99,59 @@ public class InventoryProvider extends ContentProvider {
         //so we know what content URI the Cursor was created for.
         //If the data at this URI changes, then we know we need to update the cursor.
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        
+
         return cursor;
     }
 
 
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match){
+            case PRODUCTS:
+                return insertProduct(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Inseertion is not supported for " + uri);
+        }
+    }
+
+    private Uri insertProduct(Uri uri, ContentValues values){
+        //Check to see if the name of the product is not null
+        String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
+        if(name == null){
+            throw new IllegalArgumentException("Product requires a name");
+        }
+        //check and see if the price is valid
+        Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
+        if(price == null){
+            throw new IllegalArgumentException("Product requires price");
+        }else if(price < 0){
+            throw new IllegalArgumentException("The price cannot be a negative value");
+        }
+        //check and see if the quantity is valid
+        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+        if(quantity == null){
+            throw new IllegalArgumentException("Need to enter a quantity");
+        }else if(quantity < 0){
+            throw new IllegalArgumentException("You can not have a negative quantity");
+        }
+
+        //Create an object of the SQLiteDatabase class so I can write on it
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Insert the new row with the entered information
+        long newRow = database.insert(InventoryEntry.TABLE_NAME, null, values);
+
+        //return null if it fails to insert a new row
+        if(newRow == -1){
+            Log.e(LOG_TAG, "Failes to insert row for " + uri);
+            return null;
+        }
+
+        //Notify all listeners that the data has changed for the inventory content uri
+        getContext().getContentResolver().notifyChange(uri, null);
+
+        //Once we know the new ID of the new row in the table, return the new URI
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
