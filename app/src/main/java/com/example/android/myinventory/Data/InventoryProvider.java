@@ -217,8 +217,23 @@ public class InventoryProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        //get writable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match){
+            case PRODUCTS:
+                //Delete all rows that match the selection and selectionArgs
+                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+            case PRODUCT_ID:
+                //Delete a single row given by the ID in the URI
+                selection = InventoryEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Delete is not supported for " + uri);
+        }
     }
 
 
