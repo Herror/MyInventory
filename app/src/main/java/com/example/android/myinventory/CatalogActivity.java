@@ -110,7 +110,6 @@ public class CatalogActivity extends AppCompatActivity {
     private void insertProduct(){
         //Create a new map of values where the column names are the keys
         ContentValues values = new ContentValues();
-
         //Add the desired values for the dummy data
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Bolts");
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, "100");
