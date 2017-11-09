@@ -22,11 +22,12 @@ public final class InventoryContract {
 
     //To prevent someone from accidentally instantiating the contract class,
     //make the constructor private
-    private InventoryContract(){}
+    private InventoryContract() {
+    }
 
     //Inner class that defines the table contents
 
-    public static abstract class InventoryEntry implements BaseColumns{
+    public static abstract class InventoryEntry implements BaseColumns {
 
         //Create the content URI to access the inventory data in the provider
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
@@ -37,12 +38,13 @@ public final class InventoryContract {
         public static final String COLUMN_PRODUCT_NAME = "name";
         public static final String COLUMN_PRODUCT_QUANTITY = "quantity";
         public static final String COLUMN_PRODUCT_PRICE = "price";
-    }
 
-    //The MIME type of the CONTENT_URI for a list of products of the inventory
-    public static final String CONTENT_LIST_TYPE =
-            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
-    //The MIME type of the CONTENT_URI for a single product pf the inventory
-    public static final String CONTENT_ITEM_TYPE =
-            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
+
+        //The MIME type of the CONTENT_URI for a list of products of the inventory
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
+        //The MIME type of the CONTENT_URI for a single product pf the inventory
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
+    }
 }

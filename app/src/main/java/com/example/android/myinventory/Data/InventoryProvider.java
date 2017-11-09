@@ -240,6 +240,14 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match){
+            case PRODUCTS:
+                return InventoryEntry.CONTENT_LIST_TYPE;
+            case PRODUCT_ID:
+                return InventoryEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
