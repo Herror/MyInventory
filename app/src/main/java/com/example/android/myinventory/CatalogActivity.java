@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.android.myinventory.Data.InventoryCursorAdapter;
 import com.example.android.myinventory.Data.InventoryDbHelper;
 import com.example.android.myinventory.Data.InventoryContract.InventoryEntry;
 
@@ -70,41 +72,13 @@ public class CatalogActivity extends AppCompatActivity {
                 null,
                 null,
                 null);
-
-        TextView displayView = (TextView) findViewById(R.id.test);
-
-        try {
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // pets table in the database).
-            displayView.setText("The inventory table contains " + cursor.getCount() + " products.\n\n");
-            displayView.append(InventoryEntry._ID + " - " +
-                    InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
-                    InventoryEntry.COLUMN_PRODUCT_QUANTITY + " - " +
-                    InventoryEntry.COLUMN_PRODUCT_PRICE + "\n");
-
-            //figure out the index for each column
-            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
-            int quantityIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
-            int priceIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
-
-            //iterate though all the returned rows in the cursor
-            while (cursor.moveToNext()){
-                //use that index to extract the String or int value of the word
-                //at the current row the cursor is on
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentQuantity = cursor.getInt(quantityIndex);
-                int currentPrice = cursor.getInt(priceIndex);
-                //display the values from each column of the current row
-                displayView.append("\n" + currentID + " - " + currentName + " - " + currentQuantity
-                 + " - " + currentPrice + "$");
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
+        //Create a reference to the text_view_product from the activity_catalog.xml
+        // to populate it
+        ListView displayView = (ListView) findViewById(R.id.list_view_product);
+        //Setup the cursor adapter
+        InventoryCursorAdapter invetoryAdapter = new InventoryCursorAdapter(this, cursor);
+        //Attach the cursor to the ListView
+        displayView.setAdapter(invetoryAdapter);
     }
 
     private void insertProduct(){

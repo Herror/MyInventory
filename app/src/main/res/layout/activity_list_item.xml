@@ -20,6 +20,7 @@
             android:paddingLeft="8dp">
 
             <TextView
+                android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="4dp"
@@ -28,6 +29,7 @@
                 android:textSize="16dp"/>
 
             <TextView
+                android:id="@+id/product_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="123" />
@@ -42,6 +44,7 @@
             android:text="Sell" />
 
         <TextView
+            android:id="@+id/product_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

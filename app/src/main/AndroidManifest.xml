@@ -16,17 +16,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListItem" />
-        <activity android:name=".EditorActivity"
-            android:parentActivityName="com.example.android.myinventory.CatalogActivity"/>
+        <activity
+            android:name=".EditorActivity"
+            android:parentActivityName=".CatalogActivity" />
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.android.myinventory.CatalogActivity" />
+
         <provider
-            android:authorities="com.example.android.myinventory"
             android:name=".Data.InventoryProvider"
+            android:authorities="com.example.android.myinventory"
             android:exported="false" />
 
+        <activity android:name=".Data.InventoryCursorAdapter"></activity>
     </application>
 
 </manifest>
