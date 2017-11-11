@@ -37,6 +37,13 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
 
+        //find the ListView witch will be populated with the pet data
+        ListView inventoryListView = (ListView) findViewById(R.id.list_view_product);
+        //find and set empty view on the ListView, so that it will show only when the list
+        //has 0 items
+        View emptyView = findViewById(R.id.empty_view);
+        inventoryListView.setEmptyView(emptyView);
+
         mDbHelper = new InventoryDbHelper(this);
         displayDatabaseInfo();
     }
@@ -76,9 +83,9 @@ public class CatalogActivity extends AppCompatActivity {
         // to populate it
         ListView displayView = (ListView) findViewById(R.id.list_view_product);
         //Setup the cursor adapter
-        InventoryCursorAdapter invetoryAdapter = new InventoryCursorAdapter(this, cursor);
+        InventoryCursorAdapter inventoryAdapter = new InventoryCursorAdapter(this, cursor);
         //Attach the cursor to the ListView
-        displayView.setAdapter(invetoryAdapter);
+        displayView.setAdapter(inventoryAdapter);
     }
 
     private void insertProduct(){

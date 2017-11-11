@@ -40,7 +40,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         //read the product attributes from the cursor for the current product
         String productName = cursor.getString(nameColumnIndex);
         String productQuantity = cursor.getString(quantityColumnIndex);
-        String productPrice = cursor.getString(priceColumnIndex);
+        String productPrice = "$" + cursor.getString(priceColumnIndex);
         //populate the fields with the extracted proprieties
         nameView.setText(productName);
         quantityView.setText(productQuantity);
