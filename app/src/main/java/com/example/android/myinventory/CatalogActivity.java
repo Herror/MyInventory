@@ -1,7 +1,10 @@
 package com.example.android.myinventory;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -18,9 +21,13 @@ import com.example.android.myinventory.Data.InventoryCursorAdapter;
 import com.example.android.myinventory.Data.InventoryDbHelper;
 import com.example.android.myinventory.Data.InventoryContract.InventoryEntry;
 
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private InventoryDbHelper mDbHelper;
+    //Create an ID that will be used by the CursorLoader
+    private static final int PRODUCT_LOADER = 0;
+    //Create a global variable for the Adapter
+    InventoryCursorAdapter mInventoryCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,48 +51,15 @@ public class CatalogActivity extends AppCompatActivity {
         View emptyView = findViewById(R.id.empty_view);
         inventoryListView.setEmptyView(emptyView);
 
-        mDbHelper = new InventoryDbHelper(this);
-        displayDatabaseInfo();
-    }
+        //Setup the adapter to create a list item for each row of the pet data in the Cursor
+        //There is no pet data yet (until the loader finishes) so pass in null for Cursor
+        mInventoryCursorAdapter = new InventoryCursorAdapter(this, null);
+        //attach the cursor adapter to the ListView
+        inventoryListView.setAdapter(mInventoryCursorAdapter);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
+        //Initialize the cursorLoader itself
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the pets database.
-     */
-    private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new InventoryDbHelper(this);
-
-        //Define projection for the cursor
-        String[] projection = {
-                InventoryEntry._ID,
-                InventoryEntry.COLUMN_PRODUCT_NAME,
-                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
-                InventoryEntry.COLUMN_PRODUCT_PRICE
-        };
-
-        //Perform a query on the provider using the ContentResolver.
-        //use the InventoryEntry.CONTENT_URI to access the inventory data
-        Cursor cursor = getContentResolver().query(
-                InventoryEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-        //Create a reference to the text_view_product from the activity_catalog.xml
-        // to populate it
-        ListView displayView = (ListView) findViewById(R.id.list_view_product);
-        //Setup the cursor adapter
-        InventoryCursorAdapter inventoryAdapter = new InventoryCursorAdapter(this, cursor);
-        //Attach the cursor to the ListView
-        displayView.setAdapter(inventoryAdapter);
     }
 
     private void insertProduct(){
@@ -122,5 +96,37 @@ public class CatalogActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //Define projection
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
+                InventoryEntry.COLUMN_PRODUCT_PRICE
+        };
+        //Return the CursorLoader
+        return new CursorLoader(
+                this,
+                InventoryEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        //update the new cursor containing the the updated data
+        mInventoryCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //callback when the data needs to be deleted
+        mInventoryCursorAdapter.swapCursor(null);
     }
 }
