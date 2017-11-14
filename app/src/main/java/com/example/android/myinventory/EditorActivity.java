@@ -1,6 +1,7 @@
 package com.example.android.myinventory;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,22 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
+        //examine the intent that was used to launch the activity
+        //to figure out if I'm creating a new pet or edit an existing one
+        Intent intent = getIntent();
+        Uri currentProductUri = intent.getData();
+
+        //Check to see if the currentProductUri contains any data
+        if(currentProductUri == null){
+            //if it doesn't contain, it will know that it will need to create a new product
+            //and add the title "Add a product"
+            setTitle(R.string.editor_activity_title_new_product);
+        }else {
+            //If it contains it will update the information and it will change the
+            //title to "Edit product"
+            setTitle(R.string.editor_activity_title_edit_product);
+        }
 
         //Find all the relevant views that we will need to read user input from
         mProductNameEditText = (EditText) findViewById(R.id.product_name);

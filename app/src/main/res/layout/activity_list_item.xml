@@ -41,7 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="Sell" />
+            android:text="Sell"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/product_price"

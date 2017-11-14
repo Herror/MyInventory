@@ -37,4 +37,10 @@
 
     <!-- Subtitle text for the empty view that prompts the user to add a pet [CHAR LIMIT=50] -->
     <string name="empty_view_subtitle_text">Get started by adding a product</string>
+
+    <!-- Activity title text for adding a new product[CHAR LIMIT=50] -->
+    <string name="editor_activity_title_new_product">Add new product</string>
+
+    <!-- Activity title text for editing a product[CHAR LIMIT=50] -->
+    <string name="editor_activity_title_edit_product">Edit product</string>
 </resources>
