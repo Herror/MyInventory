@@ -143,7 +143,7 @@ public class InventoryProvider extends ContentProvider {
 
         //return null if it fails to insert a new row
         if(newRow == -1){
-            Log.e(LOG_TAG, "Failes to insert row for " + uri);
+            Log.e(LOG_TAG, "Fails to insert row for " + uri);
             return null;
         }
 
@@ -220,20 +220,31 @@ public class InventoryProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         //get writable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Track the number of rows that were deleted
+        int rowsDeleted;
 
         final int match = sUriMatcher.match(uri);
         switch (match){
             case PRODUCTS:
                 //Delete all rows that match the selection and selectionArgs
-                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case PRODUCT_ID:
                 //Delete a single row given by the ID in the URI
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Delete is not supported for " + uri);
         }
+        //If 1 or more rows were deleted, then notify all listeners that the data at the
+        //given URI has changed
+        if(rowsDeleted !=0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        //return the number of rows deleted
+        return rowsDeleted;
     }
 
 
