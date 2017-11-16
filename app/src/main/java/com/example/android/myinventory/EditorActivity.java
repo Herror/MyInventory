@@ -1,7 +1,11 @@
 package com.example.android.myinventory;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +19,8 @@ import com.example.android.myinventory.Data.InventoryContract;
 import com.example.android.myinventory.Data.InventoryDbHelper;
 import com.example.android.myinventory.Data.InventoryContract.InventoryEntry;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     //EditText field to enter the name of the product
     private EditText mProductNameEditText;
@@ -23,6 +28,10 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mProductQuantityEditText;
     //EditText filed to enter the price of the product
     private EditText mProductPriceEditText;
+    //Create a URI for one pet
+    private Uri mCurrentProductUri;
+    //Identifies a particular Loader being used in the component
+    private static final int EXISTING_PRODUCT_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +41,11 @@ public class EditorActivity extends AppCompatActivity {
         //examine the intent that was used to launch the activity
         //to figure out if I'm creating a new pet or edit an existing one
         Intent intent = getIntent();
-        Uri currentProductUri = intent.getData();
+        mCurrentProductUri = intent.getData();
 
         //Check to see if the currentProductUri contains any data
-        if(currentProductUri == null){
+        //If the intent DOES NOT contain a content URI, then I know that I am creating a new product
+        if(mCurrentProductUri == null){
             //if it doesn't contain, it will know that it will need to create a new product
             //and add the title "Add a product"
             setTitle(R.string.editor_activity_title_new_product);
@@ -44,6 +54,10 @@ public class EditorActivity extends AppCompatActivity {
             //title to "Edit product"
             setTitle(R.string.editor_activity_title_edit_product);
         }
+
+        //Initialize a loader to read the product data from the database
+        //and display the current value in the editor
+        getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
 
         //Find all the relevant views that we will need to read user input from
         mProductNameEditText = (EditText) findViewById(R.id.product_name);
@@ -101,5 +115,57 @@ public class EditorActivity extends AppCompatActivity {
                 //TODO
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //Define projector for a single row in the db
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY
+        };
+        //This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(
+                this,
+                mCurrentProductUri,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        //Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1){
+            return;
+        }
+        //Proceed with moving to the first row of the cursor and reading data from it
+        if(cursor.moveToFirst()){
+            //find the columns of pet attributes that I'm interested in
+            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+
+            //Extract the values from the cursor for the given index
+            String name = cursor.getString(nameColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+
+            //set the values to the Views
+            mProductNameEditText.setText(name);
+            mProductPriceEditText.setText(Integer.toString(price));
+            mProductQuantityEditText.setText(Integer.toString(quantity));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //If the loader is invalidated, clear out all the data from the input fields
+        mProductNameEditText.setText("");
+        mProductPriceEditText.setText("");
+        mProductQuantityEditText.setText("");
     }
 }
