@@ -43,4 +43,16 @@
 
     <!-- Activity title text for editing a product[CHAR LIMIT=50] -->
     <string name="editor_activity_title_edit_product">Edit product</string>
+
+    <!-- Toast message in the EditorActivity when update fails -->
+    <string name="editor_activity_update_fail">Failed to update the product</string>
+
+    <!-- Toast message in the EditorActivity when update succeeds  -->
+    <string name="editor_activity_update_success">Product updated</string>
+
+    <!-- Toast message in the EditorActivity when creating a new product succeeds -->
+    <string name="editor_activity_insert_success">New product added</string>
+
+    <!-- Toast message in the EditorActivity when creating a new product fails -->
+    <string name="editor_activity_insert_fail">Failed to add a new product</string>
 </resources>

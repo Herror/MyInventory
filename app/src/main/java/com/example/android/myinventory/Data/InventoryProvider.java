@@ -51,7 +51,8 @@ public class InventoryProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+                        String sortOrder) {
         // get readable database
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
@@ -111,7 +112,7 @@ public class InventoryProvider extends ContentProvider {
             case PRODUCTS:
                 return insertProduct(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Inseertion is not supported for " + uri);
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
 

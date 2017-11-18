@@ -39,7 +39,7 @@ public class EditorActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_editor);
 
         //examine the intent that was used to launch the activity
-        //to figure out if I'm creating a new pet or edit an existing one
+        //to figure out if I'm creating a new product or edit an existing one
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
 
@@ -53,11 +53,10 @@ public class EditorActivity extends AppCompatActivity implements
             //If it contains it will update the information and it will change the
             //title to "Edit product"
             setTitle(R.string.editor_activity_title_edit_product);
+            //Initialize a loader to read the product data from the database
+            //and display the current value in the editor
+            getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
-
-        //Initialize a loader to read the product data from the database
-        //and display the current value in the editor
-        getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
 
         //Find all the relevant views that we will need to read user input from
         mProductNameEditText = (EditText) findViewById(R.id.product_name);
@@ -66,7 +65,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     //Gets user input and saves the new product into the Inventory database
-    public void insertProduct() {
+    public void saveProduct() {
         //get the inserted text
         String productName = mProductNameEditText.getText().toString().trim();
         String productQuantity = mProductQuantityEditText.getText().toString().trim();
@@ -82,16 +81,37 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, price);
 
-        Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
-
-        if(newUri == null){
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, "You've screwed up", Toast.LENGTH_SHORT).show();
+        //Check to see if the URI is null or not to know if you are updating an existing product
+        //or create a new one
+        //If the URI != null it means that Im updating an existing pet
+        if (mCurrentProductUri == null){
+            //Insert a new product into the provider, returning the content URI for the new pet
+            Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
+            //Add a toast message to confirm that the product was added successfully
+            if(newUri == null){
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_activity_insert_fail), Toast.LENGTH_SHORT).show();
+            }else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_activity_insert_success), Toast.LENGTH_SHORT).show();
+            }
         }else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, "New product added", Toast.LENGTH_SHORT).show();
+            //Otherwise this is an EXISTING product and I will need to update the data
+            //Pass in null for the selection and selection args
+            // because mCurrentPetUri will already identify the correct row in the database that
+            // we want to modify.
+            int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
+            //Show a toast message depending on whether or not the update was successful
+            if (rowsAffected == 0){
+                //if no rows were affected, then there was an error with the update
+                Toast.makeText(this, getString(R.string.editor_activity_update_fail), Toast.LENGTH_SHORT).show();
+            }else{
+                //Otherwise, the update was successful and we can display the toast
+                Toast.makeText(this, getString(R.string.editor_activity_update_success), Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,7 +127,7 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             //respond to the Save menu option
             case R.id.action_save:
-                insertProduct();
+                saveProduct();
                 //exit the activity
                 finish();
                 //respond to the Delete menu option
