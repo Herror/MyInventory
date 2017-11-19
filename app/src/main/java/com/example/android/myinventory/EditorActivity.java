@@ -1,18 +1,23 @@
 package com.example.android.myinventory;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +38,21 @@ public class EditorActivity extends AppCompatActivity implements
     private Uri mCurrentProductUri;
     //Identifies a particular Loader being used in the component
     private static final int EXISTING_PRODUCT_LOADER = 0;
+    //Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
+    private boolean mProductHasChanged = false;
+
+    /**
+     * Creating an onTouchListener that listens to all the changes the user has made
+     * If the user performs any changes, it will turn mProductHasChanged to true
+     */
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mProductHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +83,12 @@ public class EditorActivity extends AppCompatActivity implements
         mProductNameEditText = (EditText) findViewById(R.id.product_name);
         mProductQuantityEditText = (EditText) findViewById(R.id.product_quantity);
         mProductPriceEditText = (EditText) findViewById(R.id.product_price);
+
+        //Check and see if any of the fields had been changed
+        //I use this for the mTouchListener
+        mProductNameEditText.setOnTouchListener(mTouchListener);
+        mProductQuantityEditText.setOnTouchListener(mTouchListener);
+        mProductPriceEditText.setOnTouchListener(mTouchListener);
     }
 
     //Gets user input and saves the new product into the Inventory database
@@ -153,6 +179,27 @@ public class EditorActivity extends AppCompatActivity implements
                 //respond to the Delete menu option
             case R.id.action_delete:
                 //TODO
+            //respond to a click on the "Up" arrow button in the app bar by displaying the
+            //showUnsavedChangesDialog
+            case android.R.id.home:
+            //If the product hasn't changed, continue with navigating up to the parent activity
+                if(!mProductHasChanged) {
+                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    return true;
+                }
+            //Otherwise if there are unsaved changes, setup a dialog to warn the user.
+            //Create a clickListener to handle the user confirming that changes should be discarded
+            DialogInterface.OnClickListener discardedButtonClickListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //User clicked on the "Discard" button, navigate to the parent activity
+                            NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                        }
+                    };
+            //show dialog that notifies the user they have unsaved changes
+                showUnsavedChangesDialog(discardedButtonClickListener);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -207,5 +254,58 @@ public class EditorActivity extends AppCompatActivity implements
         mProductNameEditText.setText("");
         mProductPriceEditText.setText("");
         mProductQuantityEditText.setText("");
+    }
+
+    /**
+     * Show a dialog that warns the user there are unsaved changes that will be lost
+     * if they continue leaving the editor.
+     *
+     * @param discardButtonClickListener is the click listener for what to do when
+     *                                   the user confirms they want to discard their changes
+     */
+    private void showUnsavedChangesDialog(
+        DialogInterface.OnClickListener discardButtonClickListener) {
+        //Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //User click the "Keep editing" button, so dismiss the dialog
+                //and continue editing the pet
+                if (dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+        //Create an show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    //I hook up the showUnsavedChanges method to the back button
+    //so it will appear when the user made some changes and touches the phone's back button
+
+    @Override
+    public void onBackPressed() {
+        //If the product hasn't changed, continue with handling back button press
+        if (!mProductHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+        //Otherwise if there are unsaved changes, setup  a dialog to warn the user.
+        //Create a click listener to handle the user confirming that the changes should be discarded
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //user clicks "Discard" button, close the current activity
+                        finish();
+                    }
+                };
+        //show dialog that there are unsaved changes using the discardButtonClickListener
+        showUnsavedChangesDialog(discardButtonClickListener);
     }
 }
