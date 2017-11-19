@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -70,9 +71,28 @@ public class EditorActivity extends AppCompatActivity implements
         String productName = mProductNameEditText.getText().toString().trim();
         String productQuantity = mProductQuantityEditText.getText().toString().trim();
         String productPrice = mProductPriceEditText.getText().toString().trim();
-        //set the text to integers
-        int quantity = Integer.parseInt(productQuantity);
-        int price = Integer.parseInt(productPrice);
+
+        //Check and see if all fields in the editor are blank
+        //If so, I'll return it so it won't bother with the rest of the saveProduct method
+        if(mCurrentProductUri == null &&
+                TextUtils.isEmpty(productName) && TextUtils.isEmpty(productPrice) &&
+                TextUtils.isEmpty(productQuantity)){
+            return;
+        }
+
+        //If the quantity and the price are not provided by the user, do not try to parse
+        //the strings into Integers. Use 0 by default
+        int quantity = 0;
+        if(!TextUtils.isEmpty(productQuantity)){
+            //Convert the String into an integer
+            quantity = Integer.parseInt(productQuantity);
+        }
+
+        int price = 0;
+        if(!TextUtils.isEmpty(productPrice)){
+            //Convert the String into an integer
+            price = Integer.parseInt(productPrice);
+        }
 
         //Create a ContentValues object where column names are the keys,
         //and inventory attributes from thge editor are the values
