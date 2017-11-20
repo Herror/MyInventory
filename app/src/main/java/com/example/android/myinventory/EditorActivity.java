@@ -70,6 +70,9 @@ public class EditorActivity extends AppCompatActivity implements
             //if it doesn't contain, it will know that it will need to create a new product
             //and add the title "Add a product"
             setTitle(R.string.editor_activity_title_new_product);
+            //Invalidate the option menu, so the "Delete" menu option can be hidden.
+            //It doesn't make sense to delete a pet that hasn't been created yet
+            invalidateOptionsMenu();
         }else {
             //If it contains it will update the information and it will change the
             //title to "Edit product"
@@ -164,6 +167,21 @@ public class EditorActivity extends AppCompatActivity implements
         //Inflate the menu option from the res/menu/editor_menu.xml file.
         //This adds menu items to the top of the bar
         getMenuInflater().inflate(R.menu.editor_menu, menu);
+        return true;
+    }
+
+    //This option is called after invalidateOptionMenu() in the onCreate, so that the menu can
+    //be updated (some menu items can be hidden or visible)
+
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        //If this is a new pet, hide the "Delete" menu item
+        if(mCurrentProductUri == null){
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+            menuItem.setVisible(false);
+        }
         return true;
     }
 
