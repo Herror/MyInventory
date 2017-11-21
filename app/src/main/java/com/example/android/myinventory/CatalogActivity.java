@@ -120,7 +120,7 @@ public class CatalogActivity extends AppCompatActivity
                 return true;
             //Respond to a click on the "Delete all" menu option
             case R.id.delete_all:
-                //TODO
+                showDeleteConfirmationDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -156,5 +156,44 @@ public class CatalogActivity extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> loader) {
         //callback when the data needs to be deleted
         mInventoryCursorAdapter.swapCursor(null);
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg_catalog);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the pet.
+                deleteAllProducts();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the pet.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteAllProducts(){
+        int deleteProducts = getContentResolver().delete(
+                InventoryEntry.CONTENT_URI,
+                null,
+                null
+        );
+        if(deleteProducts == 0){
+            Toast.makeText(this, R.string.catalog_delete_products_failed, Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, R.string.catalog_delete_products_successful, Toast.LENGTH_SHORT).show();
+        }
     }
 }
