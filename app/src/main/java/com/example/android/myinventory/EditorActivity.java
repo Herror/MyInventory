@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -124,7 +125,7 @@ public class EditorActivity extends AppCompatActivity implements
         }
 
         //Create a ContentValues object where column names are the keys,
-        //and inventory attributes from thge editor are the values
+        //and inventory attributes from the editor are the values
         ContentValues values = new ContentValues();
         values.put(InventoryEntry.COLUMN_PRODUCT_NAME, productName);
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, quantity);
@@ -194,6 +195,7 @@ public class EditorActivity extends AppCompatActivity implements
                 saveProduct();
                 //exit the activity
                 finish();
+                return true;
                 //respond to the Delete menu option
             case R.id.action_delete:
                 // Pop up confirmation dialog for deletion

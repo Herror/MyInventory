@@ -17,11 +17,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,6 +104,13 @@ public class CatalogActivity extends AppCompatActivity
         //Insert the data into the table using the ContentProvider
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
     }
+
+//    public void sellProduct(){
+//        TextView quantityView = (TextView) findViewById(R.id.product_quantity);
+//        String quantityString = quantityView.getText().toString();
+//        int newQuantity = Integer.parseInt(quantityString);
+//        newQuantity--;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
