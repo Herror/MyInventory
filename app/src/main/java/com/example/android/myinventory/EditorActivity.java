@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.android.myinventory.Data.InventoryContract;
@@ -138,7 +140,15 @@ public class EditorActivity extends AppCompatActivity implements
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                DialogInterface.OnClickListener cancelButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //user clicks "Discard" button, close the current activity
+                                dialogInterface.cancel();
+                            }
+                        };
+                showOrderDialog(cancelButtonClickListener);
             }
         });
     }
@@ -353,6 +363,38 @@ public class EditorActivity extends AppCompatActivity implements
         //Create an show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    /**
+     * Show a dialog for when the user presses on the Order button. The dialog will ask the user
+     * how many products he would want to order
+     */
+    private void showOrderDialog(DialogInterface.OnClickListener cancelButtonClickListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("How many products would you want to order?");
+        builder.setNegativeButton("Cancel", cancelButtonClickListener);
+        builder.setPositiveButton("Order", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                if (intent.resolveActivity(getPackageManager()) != null){
+                    startActivity(intent);
+                }
+            }
+        });
+        //Display an EditText where the user can
+        final EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        );
+        input.setLayoutParams(lp);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
     }
 
     //I hook up the showUnsavedChanges method to the back button
