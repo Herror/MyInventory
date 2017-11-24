@@ -2,6 +2,7 @@ package com.example.android.myinventory;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -93,6 +94,28 @@ public class EditorActivity extends AppCompatActivity implements
         mProductNameEditText.setOnTouchListener(mTouchListener);
         mProductQuantityEditText.setOnTouchListener(mTouchListener);
         mProductPriceEditText.setOnTouchListener(mTouchListener);
+
+        Button minusButton = (Button) findViewById(R.id.minus_button);
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String productQuantity = mProductQuantityEditText.getText().toString().trim();
+                int minus = Integer.parseInt(productQuantity);
+                minus--;
+                mProductQuantityEditText.setText(String.valueOf(minus));
+            }
+        });
+
+        Button plusButton = (Button) findViewById(R.id.plus_button);
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String productQuantity = mProductQuantityEditText.getText().toString().trim();
+                int plus = Integer.parseInt(productQuantity);
+                plus++;
+                mProductQuantityEditText.setText(String.valueOf(plus));
+            }
+        });
     }
 
     //Gets user input and saves the new product into the Inventory database

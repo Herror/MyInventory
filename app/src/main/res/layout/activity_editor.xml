@@ -71,14 +71,36 @@
             android:paddingTop="12dp"
             android:textSize="16dp"
             android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
 
-        <EditText
+            <Button
+                android:id="@+id/minus_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <EditText
             android:id="@+id/product_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:inputType="number"
+                android:gravity="center_horizontal"
             tools:text="12" />
+
+            <Button
+                android:id="@+id/plus_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -96,6 +118,7 @@
             android:textSize="16dp"
             android:textStyle="bold"/>
         <Button
+            android:id="@+id/order_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"

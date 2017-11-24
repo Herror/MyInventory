@@ -51,7 +51,9 @@
             android:layout_centerInParent="true"
             android:layout_toLeftOf="@id/sell_button"
             android:paddingRight="8dp"
-            tools:text="3$" />
+            tools:text="$3"
+            android:textColor="#D50000"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
 </RelativeLayout>
