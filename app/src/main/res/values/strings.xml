@@ -88,4 +88,7 @@
 
     <!-- Dialog message to ask the user to confirm deleting the current product [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg_catalog">Delete all products?</string>
+
+    <!-- Editor Activity - Out of stock -->
+    <string name="out_of_stock">Out of stock?</string>
 </resources>

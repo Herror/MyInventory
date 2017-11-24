@@ -40,7 +40,7 @@ public class EditorActivity extends AppCompatActivity implements
     private Uri mCurrentProductUri;
     //Identifies a particular Loader being used in the component
     private static final int EXISTING_PRODUCT_LOADER = 0;
-    //Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
+    //Boolean flag that keeps track of whether the product has been edited (true) or not (false)
     private boolean mProductHasChanged = false;
 
     /**
@@ -95,25 +95,50 @@ public class EditorActivity extends AppCompatActivity implements
         mProductQuantityEditText.setOnTouchListener(mTouchListener);
         mProductPriceEditText.setOnTouchListener(mTouchListener);
 
+        //Create an onClickListener for the minus button, to decrement the quantity
         Button minusButton = (Button) findViewById(R.id.minus_button);
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Get the inserted quantity
                 String productQuantity = mProductQuantityEditText.getText().toString().trim();
+                //set it as an integer so we can remove from it
                 int minus = Integer.parseInt(productQuantity);
+                //Remove from it
                 minus--;
+                //display the EditText with the new quantity
                 mProductQuantityEditText.setText(String.valueOf(minus));
+                //set mProductHasChanged to true so the Alert dialog will be displayed if the user
+                //clicks on the back button or the top back button
+                mProductHasChanged = true;
             }
         });
 
+        //Create an onClickListener for the plus button, to increment the quantity
         Button plusButton = (Button) findViewById(R.id.plus_button);
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Get the inserted quantity
                 String productQuantity = mProductQuantityEditText.getText().toString().trim();
+                //set it as an integer so we can add to it
                 int plus = Integer.parseInt(productQuantity);
+                //Add to it
                 plus++;
+                //display the EditText with the new quantity
                 mProductQuantityEditText.setText(String.valueOf(plus));
+                //set mProductHasChanged to true so the Alert dialog will be displayed if the user
+                //clicks on the back button or the top back button
+                mProductHasChanged = true;
+            }
+        });
+
+        //Create an onClickListener for the order button, that will create an intent to the e-mail
+        Button orderButton = (Button) findViewById(R.id.order_button);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
             }
         });
     }
