@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.myinventory.EditorActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.example.android.myinventory.EditorActivity">
 
     <LinearLayout
         android:id="@+id/name"
@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:text="@string/product"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/product_name"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:hint="@string/hint_product_name"
-            android:textSize="16dp"/>
+            android:textSize="16dp" />
 
     </LinearLayout>
 
@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:text="Price"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/product_price"
@@ -51,8 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:hint="$"
-            android:textSize="16dp"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:textSize="16dp" />
 
     </LinearLayout>
 
@@ -67,10 +67,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/quantity"
             android:paddingTop="12dp"
+            android:text="@string/quantity"
             android:textSize="20sp"
             android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -81,25 +82,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                />
+                android:textColor="#D32F2F"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <EditText
-            android:id="@+id/product_quantity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:inputType="number"
+                android:id="@+id/product_quantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:gravity="center_horizontal"
-            tools:text="12" />
+                android:inputType="number"
+                tools:text="12" />
 
             <Button
                 android:id="@+id/plus_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+"
-                android:textSize="20dp"
+                android:textColor="#689F38"
+                android:textSize="25sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
@@ -107,40 +109,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="@string/out_of_stock"
             android:textColor="#D50000"
-            android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_gravity="center_horizontal"/>
+            android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="bottom">
-
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/order_product"
-            android:textSize="16dp"
-            android:textStyle="bold"/>
-        <Button
-            android:id="@+id/order_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/order"/>
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/order_product"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/order_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/order"
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
