@@ -79,7 +79,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
                     context.getContentResolver().notifyChange(mProductUri, null);
                 }else {
                     //If the quantity is 0 - display a toast message
-                    Toast.makeText(view.getContext(), "You are out of stock", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), R.string.you_are_out_of_stock, Toast.LENGTH_SHORT).show();
                 }
             }
         });

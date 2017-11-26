@@ -106,13 +106,18 @@ public class EditorActivity extends AppCompatActivity implements
                 String productQuantity = mProductQuantityEditText.getText().toString().trim();
                 //set it as an integer so we can remove from it
                 int minus = Integer.parseInt(productQuantity);
-                //Remove from it
-                minus--;
-                //display the EditText with the new quantity
-                mProductQuantityEditText.setText(String.valueOf(minus));
-                //set mProductHasChanged to true so the Alert dialog will be displayed if the user
-                //clicks on the back button or the top back button
-                mProductHasChanged = true;
+                if(minus <= 0){
+                    Toast.makeText(view.getContext(), R.string.cant_go_below_zero, Toast.LENGTH_SHORT).show();
+                }else {
+
+                    //Remove from it
+                    minus--;
+                    //display the EditText with the new quantity
+                    mProductQuantityEditText.setText(String.valueOf(minus));
+                    //set mProductHasChanged to true so the Alert dialog will be displayed if the user
+                    //clicks on the back button or the top back button
+                    mProductHasChanged = true;
+                }
             }
         });
 
@@ -371,9 +376,9 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void showOrderDialog(DialogInterface.OnClickListener cancelButtonClickListener){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("How many products would you want to order?");
-        builder.setNegativeButton("Cancel", cancelButtonClickListener);
-        builder.setPositiveButton("Order", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.how_many_products);
+        builder.setNegativeButton(R.string.cancel, cancelButtonClickListener);
+        builder.setPositiveButton(R.string.order, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(Intent.ACTION_SEND);

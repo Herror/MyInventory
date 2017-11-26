@@ -91,4 +91,13 @@
 
     <!-- Editor Activity - Out of stock -->
     <string name="out_of_stock">Out of stock?</string>
+
+    <!-- Editor Activity - Alert dialog text when Order button is pressed -->
+    <string name="how_many_products">How many products would you want to order?</string>
+
+    <!-- Message displayed in the Editor Activity when the minus button is pressed and the value is below 0 -->
+    <string name="cant_go_below_zero">You cannot go below 0</string>
+
+    <!-- Out of stock message to be displayed when the sell button is pressed -->
+    <string name="you_are_out_of_stock">You are out of stock</string>
 </resources>
