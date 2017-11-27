@@ -44,6 +44,9 @@ public class EditorActivity extends AppCompatActivity implements
     private static final int EXISTING_PRODUCT_LOADER = 0;
     //Boolean flag that keeps track of whether the product has been edited (true) or not (false)
     private boolean mProductHasChanged = false;
+    //EditText that it is used for AlertDialog when the order button is pressed, to prompt the user
+    //to enter the desired quantity that he would like to order
+    private EditText mInput;
 
     /**
      * Creating an onTouchListener that listens to all the changes the user has made
@@ -104,6 +107,12 @@ public class EditorActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 //Get the inserted quantity
                 String productQuantity = mProductQuantityEditText.getText().toString().trim();
+                //check and see if the EditText is empty. If it is and the user presses on the
+                //minus button, set the value to 0
+                if(TextUtils.isEmpty(productQuantity)){
+                    productQuantity = "0";
+                    mProductQuantityEditText.setText(productQuantity);
+                }
                 //set it as an integer so we can remove from it
                 int minus = Integer.parseInt(productQuantity);
                 if(minus <= 0){
@@ -128,6 +137,11 @@ public class EditorActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 //Get the inserted quantity
                 String productQuantity = mProductQuantityEditText.getText().toString().trim();
+
+                if(TextUtils.isEmpty(productQuantity)){
+                    productQuantity = "0";
+                    mProductQuantityEditText.setText(productQuantity);
+                }
                 //set it as an integer so we can add to it
                 int plus = Integer.parseInt(productQuantity);
                 //Add to it
@@ -382,21 +396,24 @@ public class EditorActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, orderSummary());
+                intent.putExtra(Intent.EXTRA_SUBJECT, getText(R.string.intent_order_of) + " " + mProductNameEditText.getText().toString().trim());
                 intent.setType("*/*");
                 if (intent.resolveActivity(getPackageManager()) != null){
                     startActivity(intent);
                 }
             }
         });
-        //Display an EditText where the user can
-        final EditText input = new EditText(this);
+        //Display an EditText where the user can enter how many products he want to order
+        mInput = new EditText(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         );
-        input.setLayoutParams(lp);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
+        mInput.setLayoutParams(lp);
+        mInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        builder.setView(mInput);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
@@ -477,5 +494,13 @@ public class EditorActivity extends AppCompatActivity implements
         }
         //close the activity
         finish();
+    }
+
+    //Create an order summary that will be used for the email intent when the order button is pressed
+    private String orderSummary() {
+        String orderSummary = getText(R.string.intent_name) + " " + mProductNameEditText.getText().toString().trim();
+        orderSummary += "\n" + getText(R.string.quantity) + ": " + mInput.getText().toString().trim();
+        orderSummary += "\n" + getText(R.string.intent_price) + " $" + mProductPriceEditText.getText().toString().trim();
+        return orderSummary;
     }
 }

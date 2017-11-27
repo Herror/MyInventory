@@ -100,4 +100,13 @@
 
     <!-- Out of stock message to be displayed when the sell button is pressed -->
     <string name="you_are_out_of_stock">You are out of stock</string>
+
+    <!-- Subject of the e-mail from the order intent in the EditorActivity -->
+    <string name="intent_order_of">Order of</string>
+
+    <!-- Email body for price from the order intent in the EditorActivity -->
+    <string name="intent_price">Price:</string>
+
+    <!-- Email body for name from the order intent in the EditorActivity -->
+    <string name="intent_name">Name:</string>
 </resources>
