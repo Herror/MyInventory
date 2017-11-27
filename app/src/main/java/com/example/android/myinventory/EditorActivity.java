@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -101,7 +102,7 @@ public class EditorActivity extends AppCompatActivity implements
         mProductPriceEditText.setOnTouchListener(mTouchListener);
 
         //Create an onClickListener for the minus button, to decrement the quantity
-        Button minusButton = (Button) findViewById(R.id.minus_button);
+        ImageButton minusButton = (ImageButton) findViewById(R.id.minus_button);
         minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +132,7 @@ public class EditorActivity extends AppCompatActivity implements
         });
 
         //Create an onClickListener for the plus button, to increment the quantity
-        Button plusButton = (Button) findViewById(R.id.plus_button);
+        ImageButton plusButton = (ImageButton) findViewById(R.id.plus_button);
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
